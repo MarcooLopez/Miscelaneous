@@ -1,5 +1,5 @@
 
-For running several jobs in the server, include the a header as the below one in your R script
+For running several jobs in the server, include a basic header as the below one in your R script
 
 ```
 #!/usr/bin/env Rscript
@@ -20,4 +20,12 @@ Then you can indicate to your R script which job to run. For instance,
 ```
 rm(list=ls())
 job <- as.integer(Sys.getenv("PBS_ARRAYID"))
+```
+
+Integer variable 'job' can be used in your script to run a single indexed job (partition, cycle, iteration, etc).
+
+Finally, you can submmit to run your R script just by typing in terminal 
+
+```
+qsub Rscript_name.R
 ```

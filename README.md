@@ -4,5 +4,5 @@
 
 2. [Sending several jobs in parallel in R](https://github.com/MarcooLopez/Miscelaneous/blob/master/parallel_jobs.md)
 
-3. [R/R Studio/R Markdown]
+3. [R/R Studio/R Markdown](https://github.com/MarcooLopez/Miscelaneous/blob/master/R_Studio_Markdown.md)
 

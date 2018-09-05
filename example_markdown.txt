@@ -2,10 +2,19 @@
 title: "Response to Selection"
 author: "Marco Lopez-Cruz"
 output: pdf_document
+fontsize: 12pt
 ---
 
+## Background
+Determining how a population will respond to selection is important from the evolutionary point of view. Typically parents with the phenotypic value of interest are selected from a base population. These parents are crossed, and a new population is developed. 
 
-```{r}  
+Figure 1 illustrates a base population tipically distributed normal with mean  $\mu_0$, and phenotypic standard deviation $\sigma_p$. Parents with phenotypic value bigger than $x_s$ are selected. These parents represent the $p_s$ proportion of the population (shadded region) and the mean of the selected parents is $\mu_s$.
+
+The **selection differential** ($S$) is the difference of the base population mean and the mean of the selected parents, this is $S=\mu_s-\mu_0$. 
+
+&nbsp; 
+
+```{r echo=FALSE,fig.height = 4.5, fig.width = 5.5, fig.align = "center"}  
 # Create data for the area to shade
 mu <- 0
 p0 <- 0.1
@@ -21,7 +30,7 @@ l <- dnorm(mu,mean=mu)
 
 # =======================================
 # Selection differential plot
-starty <- 0.01*l  
+starty <- 0.03*l  
 ptick <- 0.05*l
 tt1 <- 0.05*l
 tt2 <- 0.25*l
@@ -30,14 +39,15 @@ tmp <- seq(x0,xMax,0.01)
 cord.x <- c(x0,tmp,xMax) 
 cord.y <- c(starty,starty+dnorm(tmp),starty)
 
-plot(0,0,xlim=c(-1*xMax,xMax),ylim=c(-1.18*tt2,l+starty),main='Selection Differential',xaxt="n",yaxt="n",bty="n",pch="",xlab="",ylab="")
+plot(0,0,xlim=c(-1*xMax,xMax),ylim=c(-1.18*tt2,l+starty),main='',
+     xaxt="n",yaxt="n",bty="n",pch="",xlab="",ylab="")
 
 # First curve  
 curve(starty+dnorm(x,0,1), xlim=c(-1*xMax,xMax),add=T)
 rect(-1.1*xMax,starty,1.1*xMax,starty)
 polygon(cord.x,cord.y,col='skyblue')
-rect(mu+i,0+starty,mu+i,dnorm(mu+i)+starty,lty=2,col=2)
-rect(mu,starty,mu,dnorm(mu)+starty,lty=2,col=2)
+rect(mu+i,0+starty,mu+i,dnorm(mu+i)+starty,lty=2,col=1)
+rect(mu,starty,mu,dnorm(mu)+starty,lty=2,col=1)
 text((x0+i)/2,0.7*dnorm(i)+starty,labels=expression(p[s]))
 
 text(mu-0.02*2*xMax,starty-tt1,expression(mu[0]),pos=1)
@@ -54,3 +64,86 @@ rect(mu+i,starty-tt2-ptick/2,mu+i,starty-tt2+ptick/2)
 rect(mu,starty-tt2,mu+i,starty-tt2)
 box()
 ```
+
+**Figure 1**. Selection Differential
+
+&nbsp; 
+
+**Response to selection** ($R$) is the difference between the mean phenotypic value of the offspring of the selected parents ($\mu_1$) and the whole of the parental generation before selection ($\mu_0$). The response to selection in one generation can be mathematically predicted using the *breeder's equation* as:
+
+# $R=h^2S$
+
+where $h^2$ is known as narrow-sense **heritability** and is defined as the proportion of phenotypic variance that is explained by the genotype.
+
+&nbsp; 
+
+```{r echo=FALSE,fig.height = 6.5, fig.width = 5.5, fig.align = "center"}
+starty <- 1.6*l  
+ptick <- 0.05*l
+tt1 <- 0.05*l
+tt2 <- 0.25*l
+
+tmp <- seq(x0,xMax,0.01)
+cord.x <- c(x0,tmp,xMax) 
+cord.y <- c(starty,starty+dnorm(tmp),starty)
+
+plot(0,0,xlim=c(-1*xMax,xMax+R),ylim=c(-1.18*tt2,l+starty),main='',xaxt="n",yaxt="n",bty="n",pch="",xlab="",ylab="")
+
+# First curve  
+curve(starty+dnorm(x,0,1), xlim=c(-1*xMax,xMax),add=T)
+rect(-1.1*xMax,starty,1.1*xMax,starty)
+polygon(cord.x,cord.y,col='skyblue')
+rect(mu+i,0+starty,mu+i,dnorm(mu+i)+starty,lty=2)
+rect(mu,starty,mu,dnorm(mu)+starty,lty=2)
+text((x0+i)/2,0.7*dnorm(i)+starty,labels=expression(p[s]))
+
+# Second curve
+curve(dnorm(x,mu+R,1), xlim=c(-1*xMax+R,xMax+R),add=T)
+rect(-1.1*xMax+R,0,1.1*xMax+R,0)
+rect(mu+R,0,mu+R,dnorm(0),lty=2)
+    
+# Textos y marcas
+rect(0,0,0,dnorm(0)+starty,lty=2)
+text(mu-0.02*2*xMax,starty-tt1,expression(mu[0]),pos=1)
+rect(mu,starty-ptick,mu,starty)
+text(x0,starty-tt1,expression(x[s]),pos=1)
+rect(x0,starty-ptick,x0,starty)
+text(mu+i,starty-tt1,expression(mu[s]),pos=1)
+rect(mu+i,starty-ptick,mu+i,starty)
+
+# Selection differential
+text((mu+i)/2,starty-tt2,"S",pos=1)
+rect(mu,starty-tt2-ptick/2,mu,starty-tt2+ptick/2)
+rect(mu+i,starty-tt2-ptick/2,mu+i,starty-tt2+ptick/2)
+rect(mu,starty-tt2,mu+i,starty-tt2)
+
+#=========
+text(mu+R+0.02*2*xMax,0-tt1,expression(mu[1]),pos=1)
+rect(mu+R,0-ptick,mu+R,0)
+
+text((mu+R)/2,-tt2,"R",pos=1)
+rect(mu,-tt2-ptick/2,mu,-tt2+ptick/2)
+rect(mu+R,-tt2-ptick/2,mu+R,-tt2+ptick/2)
+rect(mu,-tt2,mu+R,-tt2)
+box()
+```
+
+**Figure 2**. Response to Selection
+
+&nbsp; 
+
+Figure 2 shows the response to selection as a result of selecting a proportion of individuals in the base population as parents for the new generation. Breeder's equation states that the offspring will have a mean whose value depends greatly on the heritability. If $h^2=0$ the mean of the offspring is equal to the mean of the base population, this is, there is no gain from selection. By contrast, if $h^2=1$, the response to selection is equal to the selection difrerential.
+
+## Example
+In a certain population of maize plants, the height of the plant has a Normal distribution with mean $\mu$=5.3 feet and standard deviation $\sigma$=0.71. We select plants that are 6.0 feet or taller to intercross to form a new generation of plants.
+
+1. Which is the proportion $p_s$ of selected individuals?
+
+2. Which is the selection differential $S$?
+
+3. Which is the response to selection if the heritability $h^2$ is equal to 0.52?
+
+
+## References
+https://www.ndsu.edu/pubweb/~mcclean/plsc431/quantgen/qgen7.htm 
+

@@ -5,7 +5,7 @@ output: pdf_document
 ---
 
 
- ```  
+```{r}  
 # Create data for the area to shade
 mu <- 0
 p0 <- 0.1
